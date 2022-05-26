@@ -77,7 +77,57 @@ string convertErrorToString(Error error){
 }
 
 void openFiles(int argc, char* argv[], vector<Error>& errors, ifstream &fin, ofstream &fout) {
-	return;
+    //если количество файлов в командной строке не равно 3
+    if (argc != 3) {
+        //записываем ошибку о том, что файлов неверное количество и завершаем работу функции
+        Error error(WrongNumberFiles);
+        errors.push_back(error);
+        return;
+    }
+
+    //приравниваем строку с названием входного файла к названию второго файла в командной строке
+    string file1 = argv[1];
+
+    //приравниваем строку с названием выходного файла к названию второго файла в командной строке
+    string file2 = argv[2];
+
+    //если расширение первого файла не равно txt
+    if (file1.substr(file1.rfind('.') + 1, string::npos) != "txt") {
+        //записываем ошибку, о том, что расширение первого файла неверное и завершаем работу функции
+        Error error(IncorrectInputFilePermission);
+        errors.push_back(error);
+        return;
+    }
+
+    //если расширение второго файла не равно txt
+    if (file2.substr(file2.rfind('.') + 1, string::npos) != "txt") {
+        //записываем ошибку, о том, что расширение второго файла неверное и завершаем работу функции
+        Error error(IncorrectOutputFilePermission);
+        errors.push_back(error);
+        return;
+    }
+
+    //пытаемя открыть файл для чтения
+    fin.open(file1);
+
+    //если файл для чтения удалось открыть
+    if (!fin.is_open()) {
+        //записываем ошибку о том, что нам не удалось открыть входной файл и завершаем работу функции
+        Error error(InputFileNotFound);
+        errors.push_back(error);
+        return;
+    }
+
+    //пытаемя открыть файл для записи
+    fout.open(file2);
+
+    //если файл для записи удалось открыть
+    if (!fout.is_open()) {
+        //записываем ошибку о том, что нам не удалось открыть выходной файл и завершаем работу функции
+        Error error(OutputFileNotCreate);
+        errors.push_back(error);
+        return;
+    }
 }
 
 void readCombination(int n, int m, ifstream& fin, vector<Error>& errors, vector<vector<char>>& combination, Combination typeCombination) {
