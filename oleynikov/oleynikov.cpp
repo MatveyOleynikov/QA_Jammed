@@ -17,7 +17,16 @@ int main(int argc, char* argv[])
 }
 
 void checkErrors(vector<Error>& errors) {
-	return;
+    //если вектор ошибок не пуст
+    if (errors.size()) {
+        //для всех ошибок...
+        for (size_t i = 0; i < errors.size(); ++i) {
+            //выводим текущую ошибку
+            cout << convertErrorToString(errors[i]);
+        }
+        //завершаем работу программы с кодом 0
+        throw 0;
+    }
 }
 
 string convertErrorToString(Error error){
