@@ -131,7 +131,48 @@ void openFiles(int argc, char* argv[], vector<Error>& errors, ifstream &fin, ofs
 }
 
 void readCombination(int n, int m, ifstream& fin, vector<Error>& errors, vector<vector<char>>& combination, Combination typeCombination) {
-    return;
+    //обозначаем размер стартовой комбинация и финишной комбинации как (n, 1)
+    combination.resize(n);
+
+    //обозначаем количеству символов '#' в текущей комбинации как 0
+    int countSharp = 0;
+
+    //для всех строк комбинации...
+    for (int i = 0; i < n; ++i) {
+        //для всех столбцов комбинации...
+        for (int j = 0; j < m; ++j) {
+            //считываем текущий символ
+            char sym;
+
+            //если символ считать не удаётся...
+            if (!(fin >> sym)) {
+                //записываем ошибку о том, что символов слишком мало и завершаем работу функции
+                Error error(TooFewCharacters, typeCombination);
+                errors.push_back(error);
+                return;
+            }
+
+            //если символ не равен букве, цифре или символу '#'
+            if (!isalnum(sym) && sym != '#') {
+                //записываем ошибку о том, что в i строке j символ текущей комбинации - ошибочный
+                Error error(WrongSymbolType, i, j, typeCombination);
+                errors.push_back(error);
+            }
+
+            //если символ равен решётке, то увеличиваем количество символов '#' на единицу
+            countSharp += (sym == '#');
+
+            //добавляем символ в i строку комбинации
+            combination[i].push_back(sym);
+        }
+    }
+
+    //если количество символов '#' не равно 1
+    if (countSharp != 1) {
+        //записываем ошибку о том, что символов решётка в текущей комбинации слишком мало или слишком много
+        Error error(SharpError, typeCombination);
+        errors.push_back(error);
+    }
 }
 
 void inputData(int& n, int& m, vector<vector<char>>& startCombination, vector<vector<char>>& finishCombination, vector<Error>& errors, ifstream& fin) {
