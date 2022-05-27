@@ -176,6 +176,44 @@ void readCombination(int n, int m, ifstream& fin, vector<Error>& errors, vector<
 }
 
 void inputData(int& n, int& m, vector<vector<char>>& startCombination, vector<vector<char>>& finishCombination, vector<Error>& errors, ifstream& fin) {
+    //считываем размеры комбинации
+    fin >> n >> m;
+
+    //если размер "n" комбинации не входит в диапазон [1..9]...
+    if (n <= 0 || n >= 10) {
+        //записываем ошибку неправильного типа размера n
+        Error error(WrongTypeSize, 0, 0);
+        errors.push_back(error);
+    }
+
+    //если размер "m" комбинации не входит в диапазон [1..9]...
+    if (m <= 0 || m >= 10) {
+        //записываем ошибку неправильного типа размера m
+        Error error(WrongTypeSize, 0, 2);
+        errors.push_back(error);
+    }
+
+    //если произведение размеров комбинации не входит в диапазон [1..9]...
+    if (n * m <= 0 || n * m >= 10) {
+        //записываем ошибку, что произведение размеров не входит в диапазон [1..9]
+        Error error(MultiplicationSizeOutOfRange);
+        errors.push_back(error);
+    }
+
+    //если в размерах есть ошибка...
+    if (errors.size() > 0) {
+        //выходим из функции досрочно
+        return;
+    }
+
+    //обозначаем размер стартовой комбинация и финишной комбинации как (n, 1)
+
+    //считываем стартовую комбинацию
+    readCombination(n, m, fin, errors, startCombination, StartCombination);
+
+    //считываем финишную комбинацию
+    readCombination(n, m, fin, errors, finishCombination, FinishCombination);
+
     return;
 }
 
