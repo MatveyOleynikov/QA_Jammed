@@ -221,6 +221,34 @@ vector<Move> getMoves(const int& n, const int& m, const int& i, const int& j) {
     //Создадим результирующий вектор
     vector<Move> result;
 
+    //Если текущая строка не является последней
+    if (i < n - 1) {
+        //Создаём ход вниз и добавляем в вектор возможных ходов
+        Move downMove(Down, i + 1, j);
+        result.push_back(downMove);
+    }
+
+    //Если текущая строка не является первой
+    if (i > 0) {
+        //Создаём ход вверх и добавляем в вектор возможных ходов
+        Move upMove(Up, i - 1, j);
+        result.push_back(upMove);
+    }
+
+    //Если текущий столбец не является последним
+    if (j < m - 1) {
+        //Создаём ход вправо и добавляем в вектор возможных ходов
+        Move rightMove(Right, i, j + 1);
+        result.push_back(rightMove);
+    }
+
+    //Если текущий столбец не является первым
+    if (j > 0) {
+        //Создаём ход влево и добавляем в вектор возможных ходов
+        Move leftMove(Left, i, j - 1);
+        result.push_back(leftMove);
+    }
+
     return result;
 }
 
