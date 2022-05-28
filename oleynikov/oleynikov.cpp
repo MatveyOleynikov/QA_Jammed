@@ -261,8 +261,46 @@ void bfs(const int& n, const int& m, const vector<vector<char>>& startCombinatio
 }
 
 vector<vector<char>> getNeighboringCombination(const int n, const int m, const vector<vector<char>>& currentCombination, const Direction& direction){
-    vector<vector<char>> neighboringCombination;
-	return neighboringCombination;
+    //Для всех строк текущей комбинации...
+    for (int i = 0; i < n; ++i) {
+        //Для всех столбцов текущей комбинации...
+        for (int j = 0; j < m; ++j) {
+            //Если символ на позиции i, j равен '#'... 
+            if (currentCombination[i][j] == '#') {
+                //Создаём соседнюю комбинацию и приравниваем её к текущей комбинации
+                vector<vector<char>> neighboringCombination = currentCombination;
+
+                //Выбор
+                switch (direction)
+                {
+                //При направлении равном: влево 
+                case Left:
+                    //Возвращаем символ '#' в координату (i, j + 1)
+                    swap(neighboringCombination[i][j], neighboringCombination[i][j + 1]);
+                    break;
+
+                //При направлении равном: влево 
+                case Right:
+                    //Возвращаем символ '#' в координату (i, j - 1)
+                    swap(neighboringCombination[i][j], neighboringCombination[i][j - 1]);
+                    break;
+
+                //При направлении равном: влево 
+                case Up:
+                    //Возвращаем символ '#' в координату (i + 1, j)
+                    swap(neighboringCombination[i][j], neighboringCombination[i + 1][j]);
+                    break;
+
+                //При направлении равном: влево 
+                case Down:
+                    //Возвращаем символ '#' в координату (i - 1, j)
+                    swap(neighboringCombination[i][j], neighboringCombination[i - 1][j]);
+                    break;
+                }
+                return neighboringCombination;
+            }
+        }
+    }
 }
 
 char convertDirectionToChar(Direction direction) {
