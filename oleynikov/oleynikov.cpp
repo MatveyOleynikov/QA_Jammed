@@ -291,7 +291,27 @@ void calculateDistantionNeighboringCombinations(const int& n, const int& m, cons
 }
 
 void bfs(const int& n, const int& m, const vector<vector<char>>& startCombination, map < vector<vector<char>>, Path>& dist) {
-    return;
+    //Создаём путь до стартовой комбинации и обозначаем его длину как 0
+    Path startPath;
+    startPath.lengthPath = 0;
+
+    //Сохраняем путь до стартовой комбинации в map
+    dist[startCombination] = startPath;
+
+    //Создаём очередь из комбинаций и добавляет туда стартовую комбинацию
+    queue<vector<vector<char>>> combinations;
+    combinations.push(startCombination);
+
+    //Пока очередь из комбинации не пуста...
+    while (!combinations.empty()) {
+
+        //Достаём из очереди первую комбинацию в ней и обозначаем её как текущую комбинацию
+        vector<vector<char>> currentCombination = combinations.front();
+        combinations.pop();
+
+        //Получаем расстояния для соседних комбинаций от текущей комбинации
+        calculateDistantionNeighboringCombinations(n, m, currentCombination, dist, combinations);
+    }
 }
 
 vector<vector<char>> getNeighboringCombination(const int n, const int m, const vector<vector<char>>& currentCombination, const Direction& direction){
