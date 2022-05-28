@@ -266,7 +266,29 @@ vector<vector<char>> getNeighboringCombination(const int n, const int m, const v
 }
 
 char convertDirectionToChar(Direction direction) {
-	return 'A';
+    //Выбор
+    switch (direction)
+    {
+    //При направлении равном: влево 
+    case Left:
+        //Возвращаем символ 'L'
+        return 'L';
+
+    //При направлении равном: вправо
+    case Right:
+        //Возвращаем символ 'R'
+        return 'R';
+
+    //При направлении равном: вверх
+    case Up:
+        //Возвращаем символ 'U'
+        return 'U';
+
+    //При направлении равном: вниз
+    case Down:
+        //Возвращаем символ 'D'
+        return 'D';
+    }
 }
 
 void generatePathes(const int n, const int m, const vector<vector<char>>& currentCombination, map < vector<vector<char>>, Path>& dist, stack<Direction> pathToCurrentCombination, vector<stack<Direction>>& directionsPathes) {
