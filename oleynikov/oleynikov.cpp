@@ -253,7 +253,41 @@ vector<Move> getMoves(const int& n, const int& m, const int& i, const int& j) {
 }
 
 void calculateDistantionNeighboringCombinations(const int& n, const int& m, const vector<vector<char>>& currentCombination, map < vector<vector<char>>, Path>& dist, queue<vector<vector<char>>>& combinations) {
-    return;
+    //Для всех строк текущей комбинации...
+    for (int i = 0; i < n; ++i) {
+        //Для всех столбцов текущей комбинации...
+        for (int j = 0; j < m; ++j) {
+            //Если символ на позиции i, j равен '#'... 
+            if (currentCombination[i][j] == '#') {
+                //Получаем возможные ходы 
+                vector<Move> neighbors = getMoves(n, m, i, j);
+
+                //Для всех возможных ходов
+                for (auto neighbor : neighbors) {
+                    //Сохраняем в следующую комбинацию текущую комбинацию
+                    vector<vector<char>> nextCombination = currentCombination;
+
+                    //Переставляем символ '#' в координаты хода
+                    swap(nextCombination[i][j], nextCombination[neighbor.x][neighbor.y]);
+                    
+                    //Если в map нет пути до следующей комбинации
+                    if (!dist.count(nextCombination)) {
+                        //Обозначаем длину пути для следующей комбинации как длину пути для текущей комбинации + 1 
+                        dist[nextCombination].lengthPath = dist[currentCombination].lengthPath + 1;
+                        //Добавляем в вектор возможных направлений перемещение до следующей комбинации направление текущего перемещения
+                        dist[nextCombination].lastMoves.push_back(neighbor.direction);
+                        //Добавляем в очередь следующую комбинацию
+                        combinations.push(nextCombination);
+                    }
+                    //иначе если растояние до следующей вершины равно расстоянию для текущей вершины + 1...
+                    else if (dist[nextCombination].lengthPath == dist[currentCombination].lengthPath + 1) {
+                        //Добавляем в вектор возможных направлений перемещение до следующей комбинации направление текущего перемещения
+                        dist[nextCombination].lastMoves.push_back(neighbor.direction);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void bfs(const int& n, const int& m, const vector<vector<char>>& startCombination, map < vector<vector<char>>, Path>& dist) {
