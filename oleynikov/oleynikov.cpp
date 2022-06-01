@@ -389,5 +389,17 @@ void generatePathes(const int n, const int m, const vector<vector<char>>& curren
 
 
 void outputData(int numberPathes, vector<stack<Direction>>& directionsPathes, ofstream& fout) {
-    return;
+    //Для всех стеков вектора оптимальных путей
+    for (auto pathToCurrentCombination : directionsPathes) {
+        //Пока стек с направлениями не пуст...
+        while (!pathToCurrentCombination.empty()) {
+            //Выводим направление в стеке, конвертирую его в символ.
+            fout << convertDirectionToChar(pathToCurrentCombination.top()) << "";
+            //Достаём направление из стека
+            pathToCurrentCombination.pop();
+        }
+
+        //Выводим перевод строки
+        fout << "\n";
+    }
 }
