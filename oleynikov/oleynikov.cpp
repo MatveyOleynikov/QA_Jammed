@@ -384,9 +384,29 @@ char convertDirectionToChar(Direction direction) {
 }
 
 void generatePathes(const int n, const int m, const vector<vector<char>>& currentCombination, map < vector<vector<char>>, Path>& dist, stack<Direction> pathToCurrentCombination, vector<stack<Direction>>& directionsPathes) {
-    return;
-}
+    //Если расстояние до текущей вершины равно 0...
+    if (dist[currentCombination].lengthPath == 0) {
+        //добавляем в вектор возможных путей текущий путь
+        directionsPathes.push_back(pathToCurrentCombination);
+    }
+    //иначе...
+    else {
+        //Для всех возможных оптимальных направлений перемещений в текущую комбинацию...
+        for (int i = 0; i < dist[currentCombination].lastMoves.size(); ++i) {
+            //Получаем предыдущую комбинацию, идя в обратном направлении от того, в котором была получена текущая комбинация
+            vector<vector<char>> previousCombination = getNeighboringCombination(n, m, currentCombination, dist[currentCombination].lastMoves[i]);
+            
+            //Создаём стек направление для предыдущей комбинации как стек направление для текущей комбинации
+            stack<Direction> pathToPreviousCombination = pathToCurrentCombination;
 
+            //Кладём в созданный стек направление, в котором мы получили текущую комбинацию 
+            pathToPreviousCombination.push(dist[currentCombination].lastMoves[i]);
+            
+            //Генерируем пути для предыдущей комбинации
+            generatePathes(n, m, previousCombination, dist, pathToPreviousCombination, directionsPathes);
+        }
+    }
+}
 
 void outputData(int numberPathes, vector<stack<Direction>>& directionsPathes, ofstream& fout) {
     //Для всех стеков вектора оптимальных путей
