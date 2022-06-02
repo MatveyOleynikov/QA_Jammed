@@ -423,3 +423,11 @@ void outputData(int numberPathes, vector<stack<Direction>>& directionsPathes, of
         fout << "\n";
     }
 }
+
+bool operator == (const Error& first, const Error& second) {
+    return first.numberRow == second.numberRow && first.numberCol == second.numberCol && first.combination == second.combination && first.type == second.type;
+}
+
+bool operator == (const Move& first, const Move& second) {
+    return first.x == second.x && first.y == second.y && first.direction == second.direction;
+}

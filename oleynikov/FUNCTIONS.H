@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
 #include <vector>
 #include <map>
 #include <queue>
@@ -66,6 +67,8 @@ struct Move {
 	Move() : direction(NotSet), x(0), y(0) {};
 	Move(Direction direction, int x, int y) : direction(direction), x(x), y(y){};
 };
+
+bool operator == (const Move& first, const Move& second);
 
 /*! Чтение комбинации
 	\param[in] n количество строк
