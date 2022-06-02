@@ -13,7 +13,52 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	return 0;
+    //подключаем русккий язык
+    setlocale(LC_ALL, "Russian");
+    
+    try {
+        //открываем файлы
+        vector<Error> errors;
+        ifstream fin;
+        ofstream fout;
+        openFiles(argc, argv, errors, fin, fout);
+
+        //проверяем, не возникли ли ошибки при открытии файлов
+        checkErrors(errors);
+
+        //считываем комбинации
+        int n = 0, m = 0;
+        vector<vector<char>> startCombination, finishCombination;
+        inputData(n, m, startCombination, finishCombination, errors, fin);
+
+        //проверяем, не возникли ли ошибки при считывании комбинаций
+        checkErrors(errors);
+
+        map < vector<vector<char>>, Path> dist;
+
+        //запускаем обход в ширину от стартовой комбинации
+        bfs(n, m, startCombination, dist);
+
+        //если обход в ширину дошёл до конечной комбинации
+        if (dist.count(finishCombination)) {
+            //выводим количество ходов, которое необходимо совершить от начальной комбинации до конечной
+            fout << dist[finishCombination].lengthPath << "\n";
+
+            //генерируем все пути от стартовой комбинации до конечной и выволим их
+            stack<Direction> answerStack;
+            vector<stack<Direction>> directionsPathes;
+            generatePathes(n, m, finishCombination, dist, answerStack, directionsPathes);
+            outputData(directionsPathes.size(), directionsPathes, fout);
+        }
+        //иначе
+        else {
+            //выводим, что невозможно достигнуть конечной комбинации
+            fout << "Невозможно достигнуть конечной комбинации";
+        }
+    }
+    catch (int error) {
+        return error;
+    }
 }
 
 void checkErrors(vector<Error>& errors) {
