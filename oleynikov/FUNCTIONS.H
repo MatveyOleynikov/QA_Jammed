@@ -1,4 +1,12 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿/*!
+* \file 
+* \brief Заголовочный файл программы
+* 
+* Файл содержит в себе структуры и прототипы для программы для поиска кратчайшего количество ходов,
+* необходимого для победы в игре Jammed.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <map>
@@ -7,67 +15,104 @@
 #include <string.h>
 #include <fstream>
 #include <string>  
+
+//! Объект не существует
 #define NotExist -1
 
 using namespace std;
 
-//Перечисление возможных ошибок
+//! \brief Перечисление возможных ошибок
 enum TypesErrors{
-	WrongNumberFiles, // Неправильное количество файлов
-	InputFileNotFound, // Входной файл не найден
-	IncorrectInputFilePermission, // Некорректное разрешение входного файла
-	OutputFileNotCreate, // Невозможно создать выходной файл
-	IncorrectOutputFilePermission, // Некорректное разрешение выходного файла
-	WrongTypeSize, // Неправильный тип размера
-	MultiplicationSizeOutOfRange, // Перемножение размеров выходит за границы указанного диапазона
-	WrongSymbolType, // Неправильный тип символа
-	SharpError, // Ошибка, связанная с символом '#'
-	TooFewCharacters // Слишком мало символов
+	WrongNumberFiles, ///< Неправильное количество файлов
+	InputFileNotFound, ///< Входной файл не найден
+	IncorrectInputFilePermission, ///< Некорректное разрешение входного файла
+	OutputFileNotCreate, ///< Невозможно создать выходной файл
+	IncorrectOutputFilePermission, ///< Некорректное разрешение выходного файла
+	WrongTypeSize, ///< Неправильный тип размера
+	MultiplicationSizeOutOfRange, ///< Перемножение размеров выходит за границы указанного диапазона
+	WrongSymbolType, ///< Неправильный тип символа
+	SharpError, ///< Ошибка, связанная с символом '#'
+	TooFewCharacters ///< Слишком мало символов
 };
 
-//Комбинация
+//! \brief Комбинация
 enum Combination {
-	StartCombination, // Стартовая комбинация
-	FinishCombination // Целевая комбинация
+	StartCombination, ///< Стартовая комбинация
+	FinishCombination ///< Целевая комбинация
 };
 
-//Структура ошибки
+//! \brief Структура ошибки
 struct Error{
-	TypesErrors type; // Тип ошибки
-	int numberRow; // Номер строки ошибки
-	int numberCol; // Номер столбца ошибки
-	Combination combination; // Комбинация, в которой произошла ошибка
+	//! Тип ошибки
+	TypesErrors type;
+	
+	//! Номер строки ошибки
+	int numberRow;
+	
+	//! Номер столбца ошибки
+	int numberCol; 
+	
+	//! Комбинация, в которой произошла ошибка
+	Combination combination;
+	
+	//!> Конструктор ошибки без дополнительных параметров
 	Error(TypesErrors type) : type(type), numberRow(NotExist), numberCol(NotExist) {};
+	
+	//!> Конструктор ошибки с дополнительным параметром: комбинация
 	Error(TypesErrors type, Combination combination) : type(type), combination(combination), numberRow(NotExist), numberCol(NotExist) {};
+	
+	//!> Конструктор ошибки с дополнительным параметром: координата
 	Error(TypesErrors type, int numberRow, int numberCol) : type(type), numberRow(numberRow), numberCol(numberCol) {};
+	
+	//!> Конструктор ошибки с дополнительными параметрами: координата, комбинация
 	Error(TypesErrors type, int numberRow, int numberCol, Combination combination) : type(type), numberRow(numberRow), numberCol(numberCol), combination(combination) {};
 };
 
+/*! Оператор сравнения 2 ошибок
+	\param[in] first ссылка на первую ошибку
+	\param[in] second ссылка на вторую ошибку
+	\return равны ли 2 ошибки
+*/
 bool operator == (const Error& first, const Error& second);
 
-//Перечисление направлений
+//! \brief Перечисление направлений
 enum Direction {
-	Left, //Влево
-	Right, //Вправо
-	Up, //Вверх
-	Down, //Вниз
-	NotSet //Не задано
+	Left, ///< Влево
+	Right, ///< Вправо
+	Up, ///< Вверх
+	Down, ///< Вниз
+	NotSet ///< Не задано
 };
 
-//Структура пути к определённой вершине
+//! \brief Структура пути к определённой вершине
 struct Path {
-	int lengthPath; //длина пути
-	vector<Direction> lastMoves; // последний ход в пути
+	//! длина пути
+	int lengthPath;
+	
+	//! последний ход в пути
+	vector<Direction> lastMoves;
 };
 
-//Структура перемещения символа '#'
+//! \brief Структура перемещения символа '#'
 struct Move {
-	int x, y; //координата перемещения символа '#'
-	Direction direction; //направление перемещения символа '#'
+	//! координата перемещения символа '#'
+	int x, y;
+	
+	//! направление перемещения символа '#'
+	Direction direction;
+	
+	//!> Конструктор по умолчанию
 	Move() : direction(NotSet), x(0), y(0) {};
+	
+	//!> Конструктор хода с направлением и координатами
 	Move(Direction direction, int x, int y) : direction(direction), x(x), y(y){};
 };
 
+/*! Оператор сравнения 2 ходов
+	\param[in] first ссылка на первый ход
+	\param[in] second ссылка на второй ход
+	\return равны ли 2 хода
+*/
 bool operator == (const Move& first, const Move& second);
 
 /*! Чтение комбинации

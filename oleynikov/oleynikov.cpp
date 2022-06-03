@@ -1,4 +1,16 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+﻿/*!
+* \file 
+* \brief Файл исходного кода
+* 
+* Файл содержит в себе реализацию функций программы для поиска кратчайшего количество ходов,
+* необходимого для победы в игре Jammed, в том числе: функции для чтения и вывода данных, 
+* функция обхода графа в ширину, функция перехода к следующей комбинации в указанном направлении,
+* функция восстановления ответа, функция проверки на ошибки,
+* а также некоторые функции конвертации данных: направление в символ, ошибка в строку.
+* 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
 #include <map>
@@ -453,6 +465,7 @@ void generatePathes(const int n, const int m, const vector<vector<char>>& curren
     }
 }
 
+
 void outputData(int numberPathes, vector<stack<Direction>>& directionsPathes, ofstream& fout) {
     //Для всех стеков вектора оптимальных путей
     for (auto pathToCurrentCombination : directionsPathes) {
@@ -476,3 +489,26 @@ bool operator == (const Error& first, const Error& second) {
 bool operator == (const Move& first, const Move& second) {
     return first.x == second.x && first.y == second.y && first.direction == second.direction;
 }
+/*
+2 4
+ACM8
+002#
+ACM#
+2008
+
+2 2
+#A
+AA
+AA
+A#
+
+2 1
+A
+#
+#
+A
+
+1 1
+#
+#
+*/
